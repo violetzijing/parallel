@@ -1,11 +1,3 @@
-/* Jacobi iteration using pthreads
-
-   usage on Solaris:
-     gcc jacobi.c -lpthread -lposix4
-     a.out gridSize numWorkers numIters
-
-*/
-
 #define _REENTRANT
 #include <pthread.h>
 #include <semaphore.h>
