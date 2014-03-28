@@ -2,7 +2,7 @@
 #include <math.h>
 #include "mpi.h"
 
-/* This example handles a 12 x 12 mesh, on 4 processors only. */
+
 #define maxn 12
 
 int main( argc, argv )
