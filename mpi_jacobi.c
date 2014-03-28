@@ -23,10 +23,7 @@ char **argv;
 
     if (size != 4) MPI_Abort( MPI_COMM_WORLD, 1 );
 
-    /* xlocal[][0] is lower ghostpoints, xlocal[][maxn+2] is upper */
-
-    /* Note that top and bottom processes have one less row of interior
-       points */
+   
     i_first = 1;
     i_last  = maxn/size;
     if (rank == 0)        i_first++;
@@ -43,8 +40,6 @@ char **argv;
 
     itcnt = 0;
     do {
-	/* Send up unless I'm at the top, then receive from below */
-	/* Note the use of xlocal[i] for &xlocal[i][0] */
 	if (rank < size - 1) 
 	    MPI_Send( xlocal[maxn/size], maxn, MPI_DOUBLE, rank + 1, 0, 
 		      MPI_COMM_WORLD );
@@ -59,7 +54,6 @@ char **argv;
 	    MPI_Recv( xlocal[maxn/size+1], maxn, MPI_DOUBLE, rank + 1, 1, 
 		      MPI_COMM_WORLD, &status );
 	
-	/* Compute new values (but not on boundary) */
 	itcnt ++;
 	diffnorm = 0.0;
 	for (i=i_first; i<=i_last; i++) 
@@ -69,7 +63,7 @@ char **argv;
 		diffnorm += (xnew[i][j] - xlocal[i][j]) * 
 		            (xnew[i][j] - xlocal[i][j]);
 	    }
-	/* Only transfer the interior points */
+
 	for (i=i_first; i<=i_last; i++) 
 	    for (j=1; j<maxn-1; j++) 
 		xlocal[i][j] = xnew[i][j];
